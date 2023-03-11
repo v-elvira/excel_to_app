@@ -1,0 +1,6 @@
+FROM python:3.9
+RUN mkdir -p /usr/sales_app/
+WORKDIR /usr/sales_app/
+COPY bot_reminder.py /usr/sales_app/bot_reminder.py
+RUN pip install PyTelegramBotAPI
+CMD ["python3", "-u", "bot_reminder.py"]

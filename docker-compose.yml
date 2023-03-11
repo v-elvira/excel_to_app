@@ -1,0 +1,63 @@
+version: "3.2"
+services:
+  postgres:
+    container_name: 'num_postgres'
+    image: 'postgres:14'
+    environment:
+      - POSTGRES_DB=sales
+      - POSTGRES_USER=manager
+      - POSTGRES_PASSWORD=test
+    ports:
+      - '5431:5432'
+    volumes:
+      - ../postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U manager -d sales"]
+      interval: 1s
+      timeout: 1s
+      retries: 5
+
+  web_test:
+    build: ./dj_num
+    command: gunicorn -w 4 -b 0.0.0.0 dj_num.wsgi
+    #command: python3 manage.py inspectdb
+    ports: 
+      - 8000:8000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - POSTGRES_DB=sales
+      - POSTGRES_USER=manager
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+  
+  front:
+    build: ./front_num
+    ports:
+      - 3000:3000
+
+  task:
+    container_name: 'num_task'
+    build: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - POSTGRES_DB=sales
+      - POSTGRES_USER=manager
+      - POSTGRES_PASSWORD=test
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    volumes:
+      - "./id_list.txt:/usr/sales_app/id_list.txt"
+
+
+  bot_polling:
+    container_name: 'num_bot'
+    build:
+      context: .
+      dockerfile: bot_Dockerfile
+    volumes:
+      - "./id_list.txt:/usr/sales_app/id_list.txt"
