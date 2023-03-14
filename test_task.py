@@ -82,8 +82,8 @@ def notify(cursor):
 if __name__ == '__main__':
 
     SLEEP_TIME = 10  # seconds between loops for Google spreadsheets checking
-    CURRENCY_CHECK_LOOPS = 60  # loops between usd rate updating
-    NOTIFICATION_TIME = "5:14"  # Telegram bot alarm time
+    CURRENCY_CHECK_LOOPS = 600  # loops between usd rate updating
+    NOTIFICATION_TIME = "10:00"  # Telegram bot alarm time
     NOTIFY_ON_START = True  # Telegram bot alarm on start
 
     notif_time = datetime.strptime(NOTIFICATION_TIME, "%H:%M").time()
