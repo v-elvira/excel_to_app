@@ -20,8 +20,8 @@ services:
       always
 
   web_test:
-    # build: ./dj_num
-    image: velvira/dj_num
+    build: ./dj_num
+    #image: velvira/dj_num
     command: gunicorn -w 4 -b 0.0.0.0 dj_num.wsgi
     #command: python3 manage.py inspectdb
     ports: 
