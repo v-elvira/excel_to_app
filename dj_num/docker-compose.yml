@@ -1,7 +1,0 @@
-version: "3.2"
-services:
-  web_test:
-    build: .
-    command: gunicorn -w 4 -b 0.0.0.0 dj_num.wsgi
-    ports: 
-      - 8000:8000
